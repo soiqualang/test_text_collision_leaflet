@@ -24,7 +24,7 @@ L.tileLayer(tilemap_srv, {
 }).addTo(map);
 
 
-var view_cong_hientrang_geo_url='http://localhost:999/text_collision/view_cong_hientrang_geo.json';
+var view_cong_hientrang_geo_url='view_cong_hientrang_geo.json';
 var view_cong_hientrang_geo= new L.GeoJSON.AJAX(view_cong_hientrang_geo_url, {
 	pointToLayer: function (feat, latlng) {
 		return L.marker(latlng, {
