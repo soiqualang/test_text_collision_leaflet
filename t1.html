@@ -1,0 +1,56 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/leaflet.css">
+<link rel="stylesheet" type="text/css" href="css/map.css">
+<link rel="stylesheet" type="text/css" href="css/fontawesome/styles.min.css">
+
+
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<script src="js/leaflet/leaflet.js"></script>
+<script src="js/leaflet/leaflet.ajax.js"></script>
+</head>
+<body>
+<div id="map"></div>
+<script>
+//https://github.com/soiqualang/Leaflet.LabelTextCollision/blob/master/dist/L.LabelTextCollision.js
+
+map = L.map('map').setView([10.1323395,106.5192586], 11);
+var tilemap_srv='http://girs.vn:8081/geoserver15/gwc/service/tms/1.0.0/thuyloibentre%3Athuyloibentre_bandonen_group@EPSG%3A900913@png/{z}/{x}/{-y}.png';
+
+L.tileLayer(tilemap_srv, {
+    attribution: 'Map tiles by <a href="http://thuyloibentre.com" target="_blank">thuyloibentre.com</a>.'
+}).addTo(map);
+
+
+var view_cong_hientrang_geo_url='http://localhost:999/text_collision/view_cong_hientrang_geo.json';
+var view_cong_hientrang_geo= new L.GeoJSON.AJAX(view_cong_hientrang_geo_url, {
+	pointToLayer: function (feat, latlng) {
+		return L.marker(latlng, {
+			icon: L.divIcon({
+				html: "<span class='cong_label'><b>" + feat.properties.ten + "</b></span>",//style của label 
+				popupAnchor: [0, 0],
+				iconAnchor: [8, 8],
+				className: 'mouse_pointer fa fa-circle cong_symbol' //style của pin
+			}),
+			title: feat.properties.ten,
+			interactive: true,
+			clickable: true,
+			fid: feat.properties.maso,
+			fname: feat.properties.ten,
+			tblname: 'view_cong_hientrang_geo'
+		}).on('click', function (e) {
+			var fid = (e.sourceTarget.options.fid);
+			var fname = (e.sourceTarget.options.fname);
+			var tblname = (e.sourceTarget.options.tblname);
+			var lat = e.latlng.lat;
+			var lon = e.latlng.lng;
+		});
+	}
+});
+view_cong_hientrang_geo.addTo(map);
+</script>
+</body>
+</html>
